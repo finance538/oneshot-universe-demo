@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0B0E">
+<title>OneShot — تسجيل الدخول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--bg:#0A0B0E;--bg2:#0E1015;--panel:#12141A;--panel2:#171A21;
+ --line:rgba(255,255,255,.08);--fg:#F5F5F2;--mut:#9DA3AB;--mut2:#6B7178;
+ --acc:#FF5500;--acc2:#E04400;--acc-txt:#FF8243;--soft:rgba(255,85,0,.08);
+ --ok:#2FD07A;--bad:#FF4D4D;--font-ar:"Cairo","Noto Sans Arabic",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-ar);background-color:var(--bg);
+ background-image:radial-gradient(at 20% 20%, rgba(92,53,38,.50) 0px, rgba(25,28,37,0) 55%),
+  radial-gradient(at 100% 0%, rgba(255,85,0,.05), rgba(0,0,0,0) 65%);
+ color:var(--fg);-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;
+ display:grid;place-items:center;padding:24px}
+.wrap{width:100%;max-width:920px;display:grid;grid-template-columns:1fr 1fr;
+ background:linear-gradient(140deg,var(--panel2),var(--panel));border:1px solid var(--line);
+ border-radius:22px;overflow:hidden;box-shadow:0 30px 70px -40px rgba(0,0,0,.95)}
+.side{padding:32px 28px;border-inline-end:1px solid var(--line);
+ background:linear-gradient(150deg,rgba(255,85,0,.09),rgba(18,20,26,.5))}
+.logo{height:32px;margin-bottom:16px}
+.side h2{font-size:20px;font-weight:800;margin-bottom:8px}
+.side p{font-size:12.5px;color:var(--mut);margin-bottom:18px}
+.role{display:flex;gap:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--line);
+ border-radius:12px;margin-bottom:8px;align-items:flex-start}
+.role b{font-size:12.5px;display:block;margin-bottom:3px}
+.role span{font-size:10.5px;color:var(--mut2);line-height:1.55}
+.form{padding:32px 28px}
+.tabs{display:flex;gap:6px;margin-bottom:18px}
+.tab{flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:9px;border-radius:10px;
+ background:var(--bg2);border:1px solid var(--line);color:var(--mut);cursor:pointer}
+.tab.on{background:var(--soft);border-color:rgba(255,85,0,.21);color:var(--acc-txt)}
+label{display:block;font-size:11.5px;color:var(--mut);margin-bottom:6px}
+input{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 12px;
+ color:var(--fg);font-size:13px;font-family:inherit;margin-bottom:12px;direction:ltr}
+input:focus{outline:none;border-color:rgba(255,85,0,.4)}
+.btn{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);
+ color:#fff;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer}
+.btn.prim{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;
+ box-shadow:0 4px 15px rgba(255,85,0,.30)}
+.btn[disabled]{opacity:.6;cursor:default}
+.msg{display:none;font-size:11.5px;border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.msg.on{display:block}
+.msg.err{color:#FF8A8A;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.25)}
+.msg.ok{color:#B6E9CE;background:rgba(47,208,122,.08);border:1px solid rgba(47,208,122,.22)}
+.note{margin-top:14px;font-size:10.5px;color:var(--mut2);line-height:1.7;background:var(--bg2);
+ border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.welcome{display:none;padding:32px 28px;text-align:center}
+.welcome.on{display:block}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;padding:7px 15px;border-radius:99px;
+ background:var(--soft);border:1px solid rgba(255,85,0,.21);color:var(--acc-txt);margin-bottom:14px}
+.welcome h3{font-size:19px;font-weight:800;margin-bottom:6px}
+.welcome p{font-size:12.5px;color:var(--mut);margin-bottom:18px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}.side{border-inline-end:0;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<div class="wrap">
+  <div class="side">
+    <img class="logo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY1IDI1IDM3MCAzNzAiIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIj4KCiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0ic29mdC1zaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI2IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjMDAwMDAwIiBmbG9vZC1vcGFjaXR5PSIwLjQ1IiAvPgogICAgICA8L2ZpbHRlcj4KICAgICAgPGZpbHRlciBpZD0ib3JhbmdlLWdsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIwIiBzdGREZXZpYXRpb249IjYiIGZsb29kLWNvbG9yPSIjRkY1NTAwIiBmbG9vZC1vcGFjaXR5PSIwLjYiIC8+CiAgICAgIDwvZmlsdGVyPgogICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJsYWRlLWdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwLjg4Ii8+CiAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CgoKCiAgPHJlY3QgeD0iNjUiIHk9IjI1IiB3aWR0aD0iMzcwIiBoZWlnaHQ9IjM3MCIgcng9IjcyIiBmaWxsPSIjMTIxNDFBIiAvPgogIDxnIGlkPSJlbWJsZW0tZ3JvdXAiPgogICAgPCEtLSBBcGVydHVyZSBCbGFkZXMgLS0+CgogICAgPHBhdGgKICAgICAgZD0iTSAzODkuODcgMjE2LjExIEEgMTQwIDE0MCAwIDAgMSAzMjUuMjIgMzI4LjA3IFEgMzI3Ljg3IDI4My45MCAzMDEuMTggMjM4Ljk1IEEgNTguOCA1OC44IDAgMCAwIDMwMS4xOCAxODEuMDUgUSAzNTQuMzkgMTg0Ljk0IDM4OS44NyAyMTYuMTEgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzE0LjY0IDMzNC4xOCBBIDE0MCAxNDAgMCAwIDEgMTg1LjM2IDMzNC4xOCBRIDIyNC45NCAzMTQuMzkgMjUwLjUxIDI2OC44MCBBIDU4LjggNTguOCAwIDAgMCAzMDAuNjYgMjM5Ljg0IFEgMzIzLjkwIDI4Ny44NyAzMTQuNjQgMzM0LjE4IFoiCiAgICAgIGZpbGw9InVybCgjYmxhZGUtZ3JhZCkiCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgoKCiAgICA8cGF0aAogICAgICBkPSJNIDE3NC43OCAzMjguMDcgQSAxNDAgMTQwIDAgMCAxIDExMC4xMyAyMTYuMTEgUSAxNDcuMDcgMjQwLjQ5IDE5OS4zNCAyMzkuODQgQSA1OC44IDU4LjggMCAwIDAgMjQ5LjQ5IDI2OC44MCBRIDIxOS41MSAzMTIuOTMgMTc0Ljc4IDMyOC4wNyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxMTAuMTMgMjAzLjg5IEEgMTQwIDE0MCAwIDAgMSAxNzQuNzggOTEuOTMgUSAxNzIuMTMgMTM2LjEwIDE5OC44MiAxODEuMDUgQSA1OC44IDU4LjggMCAwIDAgMTk4LjgyIDIzOC45NSBRIDE0NS42MSAyMzUuMDYgMTEwLjEzIDIwMy44OSBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxODUuMzYgODUuODIgQSAxNDAgMTQwIDAgMCAxIDMxNC42NCA4NS44MiBRIDI3NS4wNiAxMDUuNjEgMjQ5LjQ5IDE1MS4yMCBBIDU4LjggNTguOCAwIDAgMCAxOTkuMzQgMTgwLjE2IFEgMTc2LjEwIDEzMi4xMyAxODUuMzYgODUuODIgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzI1LjIyIDkxLjkzIEEgMTQwIDE0MCAwIDAgMSAzODkuODcgMjAzLjg5IFEgMzUyLjkzIDE3OS41MSAzMDAuNjYgMTgwLjE2IEEgNTguOCA1OC44IDAgMCAwIDI1MC41MSAxNTEuMjAgUSAyODAuNDkgMTA3LjA3IDMyNS4yMiA5MS45MyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCiAgICA8IS0tIFByZWNpc2lvbiBUYXJnZXQgUmV0aWNsZSAtLT4KCiAgICA8ZyBpZD0icmV0aWNsZS1ncm91cCIgZmlsdGVyPSJ1cmwoI29yYW5nZS1nbG93KSIgdHJhbnNmb3JtPSJyb3RhdGUoMCAyNTAgMjEwKSI+CiAgICAgIDwhLS0gT3V0ZXIgUmV0aWNsZSBSaW5nIC0tPgogICAgICA8Y2lyY2xlCiAgICAgICAgY3g9IjI1MCIKICAgICAgICBjeT0iMjEwIgogICAgICAgIHI9IjQ0LjY5IgogICAgICAgIGZpbGw9Im5vbmUiCiAgICAgICAgc3Ryb2tlPSIjRkY1NTAwIgogICAgICAgIHN0cm9rZS13aWR0aD0iMy44MCIKICAgICAgLz4KCiAgICAgICAgPCEtLSBUb3AgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMTU3LjMxIgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBCb3R0b20gVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMjQ2LjY5IgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBMZWZ0IFRpY2sgLS0+CiAgICAgICAgPHJlY3QKICAgICAgICAgIHg9IjE5Ny4zMSIKICAgICAgICAgIHk9IjIwNy45MCIKICAgICAgICAgIHdpZHRoPSIxNi4wMCIKICAgICAgICAgIGhlaWdodD0iNC4yMCIKICAgICAgICAgIHJ4PSIxIgogICAgICAgICAgZmlsbD0iI0ZGNTUwMCIKICAgICAgICAvPgogICAgICAgIDwhLS0gUmlnaHQgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjg2LjY5IgogICAgICAgICAgeT0iMjA3LjkwIgogICAgICAgICAgd2lkdGg9IjE2LjAwIgogICAgICAgICAgaGVpZ2h0PSI0LjIwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CgoKICAgICAgICA8IS0tIENlbnRlciBCdWxsc2V5ZSBEb3QgLS0+CiAgICAgICAgPGNpcmNsZQogICAgICAgICAgY3g9IjI1MCIKICAgICAgICAgIGN5PSIyMTAiCiAgICAgICAgICByPSIxNi45OCIKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiCiAgICAgICAgLz4KCiAgICA8L2c+CgogIDwvZz4KCgo8L3N2Zz4K" alt="oneShot">
+    <h2>صفحة واحدة — النظام يحدّد دورك</h2>
+    <p>حساب واحد، ودخول واحد. بعد التحقق، يوجّهك النظام تلقائيًا إلى اللوحة المسموح لك بها.</p>
+    <div class="role"><div><b>👑 أدمين</b>
+      <span>ينشئ الحسابات، ويحدّد دور كل مستخدم، ويرى كل الأقسام.</span></div></div>
+    <div class="role"><div><b>🏪 تاجر</b>
+      <span>بواباته وفواتيره ومحفظته وطلباته فقط.</span></div></div>
+    <div class="role"><div><b>🧪 لودر</b>
+      <span>صلاحية واحدة: محاكاة الدفع وتشغيل/إيقاف الحماية أثناء الاختبار.</span></div></div>
+    <div class="note">🔐 التحقق من كلمة المرور ومن الدور يحدث في <b>الخادم</b> — لا في المتصفح.
+    كلمة المرور مخزّنة مشفّرة (scrypt + salt)، والجلسة موقّعة.</div>
+  </div>
+
+  <div class="form" id="formbox">
+    <div class="tabs">
+      <div class="tab on" data-tab="login">تسجيل الدخول</div>
+      <div class="tab" data-tab="signup">إنشاء حساب</div>
+    </div>
+    <div class="msg" id="msg"></div>
+
+    <div id="pane-login">
+      <label>البريد الإلكتروني</label>
+      <input id="l-email" type="email" placeholder="name@1shotcam.com" autocomplete="username">
+      <label>كلمة المرور</label>
+      <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <button class="btn prim" id="login-btn">دخول</button>
+    </div>
+
+    <div id="pane-signup" style="display:none">
+      <label>الاسم</label>
+      <input id="s-name" type="text" placeholder="الاسم الكامل">
+      <label>البريد الإلكتروني</label>
+      <input id="s-email" type="email" placeholder="name@1shotcam.com" autocomplete="username">
+      <label>كلمة المرور <span style="color:var(--mut2)">(٨ أحرف على الأقل)</span></label>
+      <input id="s-pass" type="password" placeholder="••••••••" autocomplete="new-password">
+      <button class="btn prim" id="signup-btn">إنشاء الحساب</button>
+      <div class="note">أول حساب يُنشأ في المنصة يصبح <b>أدمين</b> تلقائيًا. بعده، الأدمين هو من ينشئ
+      حسابات التجار واللودر.</div>
+    </div>
+  </div>
+
+  <div class="welcome" id="welcome">
+    <div class="badge" id="who">—</div>
+    <h3>تم التحقق من الدخول</h3>
+    <p>الخادم تعرّف على دورك، ووجّهك إلى: <b id="to" style="color:var(--fg)">—</b></p>
+    <button class="btn prim" id="openBtn" data-go="cmd" style="max-width:240px;margin:0 auto;display:block">افتح لوحتي ←</button>
+    <div class="note" style="text-align:start;margin-top:18px">🛡️ الجلسة موقّعة من الخادم ومدّتها ١٢ ساعة،
+    ولا يمكن تغيير الدور من المتصفح.</div>
+  </div>
+</div>
+
+<script>
+var TOKEN = null;
+function $$(id){ return document.getElementById(id); }
+function msg(el, text, kind){ el.textContent = text; el.className = 'msg on ' + kind; }
+function hide(el){ el.className = 'msg'; }
+
+async function api(path, body, token){
+  var h = { 'Content-Type': 'application/json' };
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  var res = await fetch('/api' + path, { method: body ? 'POST' : 'GET', headers: h,
+    body: body ? JSON.stringify(body) : undefined });
+  var j = {}; try { j = await res.json(); } catch(e){}
+  j.status = res.status; return j;
+}
+
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x===t); });
+    var isLogin = t.dataset.tab === 'login';
+    $$('pane-login').style.display = isLogin ? 'block' : 'none';
+    $$('pane-signup').style.display = isLogin ? 'none' : 'block';
+    hide($$('msg'));
+  });
+});
+
+function done(r){
+  TOKEN = r.token;
+  try { localStorage.setItem('oneshot.token', r.token);
+        localStorage.setItem('oneshot.role', r.user.role);
+        localStorage.setItem('oneshot.name', r.user.name); } catch(e){}
+  $$('formbox').style.display = 'none';
+  $$('welcome').classList.add('on');
+  $$('who').textContent = (r.user.role==='admin' ? '👑 أدمين' : r.user.role==='merchant' ? '🏪 تاجر' : '🧪 لودر') + ' · ' + r.user.name;
+  $$('to').textContent = r.user.role==='admin' ? 'مركز القيادة' : (r.user.role==='merchant' ? 'لوحة التاجر' : 'لوحة اللودر');
+  $$('openBtn').dataset.go = r.user.role==='admin' ? 'cmd' : (r.user.role==='merchant' ? 'merchant' : 'loader');
+}
+
+async function doLogin(){
+  hide($$('msg'));
+  var b = $$('login-btn'); b.disabled = true; b.textContent = 'جارٍ الدخول…';
+  var r = await api('/login', { email: $$('l-email').value, password: $$('l-pass').value });
+  b.disabled = false; b.textContent = 'دخول';
+  if (r.ok) return done(r);
+  msg($$('msg'), r.error || 'تعذّر الدخول', 'err');
+}
+
+async function doSignup(){
+  hide($$('msg'));
+  var b = $$('signup-btn'); b.disabled = true; b.textContent = 'جارٍ الإنشاء…';
+  var r = await api('/signup', { name: $$('s-name').value, email: $$('s-email').value, password: $$('s-pass').value });
+  b.disabled = false; b.textContent = 'إنشاء الحساب';
+  if (r.ok){
+    if (r.first) { msg($$('msg'), 'هذا أول حساب — تم إنشاؤه كأدمين للمنصة.', 'ok'); }
+    setTimeout(function(){ done(r); }, 500);
+    return;
+  }
+  msg($$('msg'), r.error || 'تعذّر إنشاء الحساب', 'err');
+}
+
+$$('login-btn').addEventListener('click', doLogin);
+$$('signup-btn').addEventListener('click', doSignup);
+$$('l-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+$$('openBtn').addEventListener('click', function(){
+  location.href = 'prototype.html#' + this.dataset.go;
+});
+// already signed in? offer to continue
+(async function(){
+  var t = null; try { t = localStorage.getItem('oneshot.token'); } catch(e){}
+  if (!t) return;
+  var r = await api('/me', null, t);
+  if (r.ok) msg($$('msg'), 'لديك جلسة نشطة — يمكنك الدخول مباشرة.', 'ok');
+  else { try { localStorage.removeItem('oneshot.token'); } catch(e){} }
+})();
+</script>
+
+</body></html>

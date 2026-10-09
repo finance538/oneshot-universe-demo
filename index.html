@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OneShot Universe — النموذج</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--bg:#0A0B0E;--panel:#12141A;--panel2:#171A21;--line:rgba(255,255,255,.08);
+ --fg:#F5F5F2;--mut:#9DA3AB;--mut2:#6B7178;--acc:#FF5500;--acc2:#E04400;--acc-txt:#FF8243;--soft:rgba(255,85,0,.08);
+ --font-ar:"Cairo","Noto Sans Arabic",sans-serif;--font-disp:"Outfit",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-ar);background-color:var(--bg);
+ background-image:radial-gradient(at 20% 20%, rgba(92,53,38,.50) 0px, rgba(25,28,37,0) 55%),
+  radial-gradient(at 100% 0%, rgba(255,85,0,.05), rgba(0,0,0,0) 65%);
+ color:var(--fg);-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 22px;text-align:center}
+.logo{height:38px;width:auto;margin-bottom:14px}
+h1{font-family:var(--font-disp);font-size:34px;font-weight:900;letter-spacing:-.02em;margin-bottom:8px}
+h1 span{color:var(--acc-txt)}
+p.sub{color:var(--mut);max-width:640px;margin-bottom:34px;font-size:14px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:820px;width:100%}
+a.card{display:block;background:linear-gradient(140deg,var(--panel2),var(--panel));border:1px solid var(--line);
+ border-radius:18px;padding:26px;text-decoration:none;color:var(--fg);transition:.28s;text-align:right}
+a.card:hover{transform:translateY(-4px);border-color:rgba(255,85,0,.30)}
+a.card .ic{font-size:30px;margin-bottom:12px}
+a.card h3{font-size:17px;font-weight:800;margin-bottom:7px}
+a.card p{font-size:12.5px;color:var(--mut);line-height:1.7}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:5px 12px;border-radius:99px;
+ background:var(--soft);border:1px solid rgba(255,85,0,.21);color:var(--acc-txt);margin-bottom:16px}
+.foot{margin-top:34px;color:var(--mut2);font-size:11.5px}
+.foot code{font-family:ui-monospace,monospace;direction:ltr;background:#0e1015;padding:2px 7px;border-radius:6px;border:1px solid var(--line)}
+@media(max-width:700px){.cards{grid-template-columns:1fr}h1{font-size:25px}}
+</style></head><body>
+<img class="logo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY1IDI1IDM3MCAzNzAiIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIj4KCiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0ic29mdC1zaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI2IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjMDAwMDAwIiBmbG9vZC1vcGFjaXR5PSIwLjQ1IiAvPgogICAgICA8L2ZpbHRlcj4KICAgICAgPGZpbHRlciBpZD0ib3JhbmdlLWdsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIwIiBzdGREZXZpYXRpb249IjYiIGZsb29kLWNvbG9yPSIjRkY1NTAwIiBmbG9vZC1vcGFjaXR5PSIwLjYiIC8+CiAgICAgIDwvZmlsdGVyPgogICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJsYWRlLWdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwLjg4Ii8+CiAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CgoKCiAgPHJlY3QgeD0iNjUiIHk9IjI1IiB3aWR0aD0iMzcwIiBoZWlnaHQ9IjM3MCIgcng9IjcyIiBmaWxsPSIjMTIxNDFBIiAvPgogIDxnIGlkPSJlbWJsZW0tZ3JvdXAiPgogICAgPCEtLSBBcGVydHVyZSBCbGFkZXMgLS0+CgogICAgPHBhdGgKICAgICAgZD0iTSAzODkuODcgMjE2LjExIEEgMTQwIDE0MCAwIDAgMSAzMjUuMjIgMzI4LjA3IFEgMzI3Ljg3IDI4My45MCAzMDEuMTggMjM4Ljk1IEEgNTguOCA1OC44IDAgMCAwIDMwMS4xOCAxODEuMDUgUSAzNTQuMzkgMTg0Ljk0IDM4OS44NyAyMTYuMTEgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzE0LjY0IDMzNC4xOCBBIDE0MCAxNDAgMCAwIDEgMTg1LjM2IDMzNC4xOCBRIDIyNC45NCAzMTQuMzkgMjUwLjUxIDI2OC44MCBBIDU4LjggNTguOCAwIDAgMCAzMDAuNjYgMjM5Ljg0IFEgMzIzLjkwIDI4Ny44NyAzMTQuNjQgMzM0LjE4IFoiCiAgICAgIGZpbGw9InVybCgjYmxhZGUtZ3JhZCkiCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgoKCiAgICA8cGF0aAogICAgICBkPSJNIDE3NC43OCAzMjguMDcgQSAxNDAgMTQwIDAgMCAxIDExMC4xMyAyMTYuMTEgUSAxNDcuMDcgMjQwLjQ5IDE5OS4zNCAyMzkuODQgQSA1OC44IDU4LjggMCAwIDAgMjQ5LjQ5IDI2OC44MCBRIDIxOS41MSAzMTIuOTMgMTc0Ljc4IDMyOC4wNyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxMTAuMTMgMjAzLjg5IEEgMTQwIDE0MCAwIDAgMSAxNzQuNzggOTEuOTMgUSAxNzIuMTMgMTM2LjEwIDE5OC44MiAxODEuMDUgQSA1OC44IDU4LjggMCAwIDAgMTk4LjgyIDIzOC45NSBRIDE0NS42MSAyMzUuMDYgMTEwLjEzIDIwMy44OSBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxODUuMzYgODUuODIgQSAxNDAgMTQwIDAgMCAxIDMxNC42NCA4NS44MiBRIDI3NS4wNiAxMDUuNjEgMjQ5LjQ5IDE1MS4yMCBBIDU4LjggNTguOCAwIDAgMCAxOTkuMzQgMTgwLjE2IFEgMTc2LjEwIDEzMi4xMyAxODUuMzYgODUuODIgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzI1LjIyIDkxLjkzIEEgMTQwIDE0MCAwIDAgMSAzODkuODcgMjAzLjg5IFEgMzUyLjkzIDE3OS41MSAzMDAuNjYgMTgwLjE2IEEgNTguOCA1OC44IDAgMCAwIDI1MC41MSAxNTEuMjAgUSAyODAuNDkgMTA3LjA3IDMyNS4yMiA5MS45MyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCiAgICA8IS0tIFByZWNpc2lvbiBUYXJnZXQgUmV0aWNsZSAtLT4KCiAgICA8ZyBpZD0icmV0aWNsZS1ncm91cCIgZmlsdGVyPSJ1cmwoI29yYW5nZS1nbG93KSIgdHJhbnNmb3JtPSJyb3RhdGUoMCAyNTAgMjEwKSI+CiAgICAgIDwhLS0gT3V0ZXIgUmV0aWNsZSBSaW5nIC0tPgogICAgICA8Y2lyY2xlCiAgICAgICAgY3g9IjI1MCIKICAgICAgICBjeT0iMjEwIgogICAgICAgIHI9IjQ0LjY5IgogICAgICAgIGZpbGw9Im5vbmUiCiAgICAgICAgc3Ryb2tlPSIjRkY1NTAwIgogICAgICAgIHN0cm9rZS13aWR0aD0iMy44MCIKICAgICAgLz4KCiAgICAgICAgPCEtLSBUb3AgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMTU3LjMxIgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBCb3R0b20gVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMjQ2LjY5IgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBMZWZ0IFRpY2sgLS0+CiAgICAgICAgPHJlY3QKICAgICAgICAgIHg9IjE5Ny4zMSIKICAgICAgICAgIHk9IjIwNy45MCIKICAgICAgICAgIHdpZHRoPSIxNi4wMCIKICAgICAgICAgIGhlaWdodD0iNC4yMCIKICAgICAgICAgIHJ4PSIxIgogICAgICAgICAgZmlsbD0iI0ZGNTUwMCIKICAgICAgICAvPgogICAgICAgIDwhLS0gUmlnaHQgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjg2LjY5IgogICAgICAgICAgeT0iMjA3LjkwIgogICAgICAgICAgd2lkdGg9IjE2LjAwIgogICAgICAgICAgaGVpZ2h0PSI0LjIwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CgoKICAgICAgICA8IS0tIENlbnRlciBCdWxsc2V5ZSBEb3QgLS0+CiAgICAgICAgPGNpcmNsZQogICAgICAgICAgY3g9IjI1MCIKICAgICAgICAgIGN5PSIyMTAiCiAgICAgICAgICByPSIxNi45OCIKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiCiAgICAgICAgLz4KCiAgICA8L2c+CgogIDwvZz4KCgo8L3N2Zz4K" alt="oneShot">
+<div class="badge">🌐 oneshot-universe-demo · نموذج تصميم</div>
+<h1>OneShot <span>Universe</span></h1>
+<p class="sub">نموذج تصميم متكامل — واجهة موحّدة لنشاط 1shotcam: المدفوعات، المحفظة، الميديا، التسويق، الـ API، الكتالوج، العملاء، والذكاء الاصطناعي.</p>
+<div class="cards">
+  <a class="card" href="/prototype.html">
+    <div class="ic">🛰️</div>
+    <h3>النموذج التفاعلي</h3>
+    <p>١٩ صفحة تتنقّل فورًا · مبدّل الأدوار (أدمين/تاجر/لودر) · مفاتيح حيّة · تبويبات بوابات الدفع · سير المتقدمين.
+    كل شيء شغّال داخل المتصفح.</p>
+  </a>
+  <a class="card" href="/site-copy.html">
+    <div class="ic">🎬</div>
+    <h3>نسخة الموقع الكاملة</h3>
+    <p>الصفحة الرئيسية بنفس هوية 1shotcam: الميديا والتصوير، رصيد جوجل، ربط الـ API، الكتالوج (١٢ خدمة)،
+    إعداد البوابات، التطبيقات (Windows/iOS/Android)، والتواصل — مع حركة الدخول والتمرير.</p>
+  </a>
+</div>
+<div class="foot">صُنع على هوية oneShot الرسمية — أسود معدني · برتقالي <code>#FF5500</code></div>
+</body></html>

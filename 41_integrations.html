@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0B0E">
+<title>OneShot Universe — التكاملات والـ APIs</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{
+  /* tokens taken from www.1shotcam.com (dark) + official brand kit */
+  --bg:#0A0B0E; --bg2:#0E1015; --panel:#12141A; --panel2:#171A21; --panel3:#1D212A;
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.13);
+  --fg:#F5F5F2; --mut:#9DA3AB; --mut2:#6B7178;
+  --acc:#FF5500; --acc2:#E04400; --acc-txt:#FF8243;
+  --acc-soft:rgba(255,85,0,.08); --acc-glow:rgba(255,85,0,.30);
+  --ok:#2FD07A; --warn:#FFB020; --bad:#FF4D4D; --info:#4C8DFF; --purple:#A87BFF;
+  --r:18px; --r2:10px; --r3:11px;
+  --mono:ui-monospace,"SFMono-Regular","Menlo","Consolas","Liberation Mono",monospace;
+  --font-ar:"Cairo","Noto Sans Arabic","Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-disp:"Outfit","Montserrat",-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font-ar);
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(at 20% 20%, rgba(92,53,38,.50) 0px, rgba(25,28,37,0) 55%),
+    radial-gradient(at 100% 0%, rgba(255,85,0,.05), rgba(0,0,0,0) 65%),
+    radial-gradient(rgba(37,42,51,.55) 0.75px, rgba(0,0,0,0) 0.75px),
+    radial-gradient(rgba(18,20,26,.85) 0.75px, rgba(10,11,14,1) 0.75px);
+  background-size:auto, 22px 22px, 22px 22px;
+  background-position:0 0, 0 0, 11px 11px;
+  color:var(--fg); -webkit-font-smoothing:antialiased; overflow:hidden;
+  font-size:14px; line-height:1.45;
+}
+::-webkit-scrollbar{width:0;height:0}
+.num{font-variant-numeric:tabular-nums; font-family:var(--mono); letter-spacing:-.02em}
+.brand b,.logo,.kpi .val,.gauge b{font-family:var(--font-disp);font-weight:800}
+.en{font-family:"Segoe UI",system-ui,sans-serif; direction:ltr; unicode-bidi:isolate}
+
+/* ---------- shell ---------- */
+.app{display:flex;height:100vh}
+.sidebar{
+  width:238px;flex:0 0 238px;background:linear-gradient(180deg,rgba(11,13,15,.96),rgba(10,11,14,.99));
+  border-inline-end:1px solid var(--line);display:flex;flex-direction:column;padding:16px 12px;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.logo{
+  width:38px;height:38px;border-radius:13px;flex:0 0 38px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  box-shadow:0 10px 26px -14px rgba(255,85,0,.55), inset 0 1px 0 rgba(255,255,255,.28);
+  display:grid;place-items:center;color:#fff;font-size:15px;
+}
+.brand b{font-size:14px;letter-spacing:.04em;display:block;line-height:1.15}
+.brand span{font-size:10px;color:var(--mut2);letter-spacing:.14em}
+.nav{display:flex;flex-direction:column;gap:2px;overflow:hidden;flex:1}
+.nav .item{
+  display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r3);
+  color:var(--mut);font-size:13px;cursor:pointer;border:1px solid transparent;position:relative
+}
+.nav .item i{font-size:15px;width:20px;text-align:center;font-style:normal;opacity:.95}
+.nav .item .tag{margin-inline-start:auto;font-size:10px;padding:1px 7px;border-radius:99px;background:var(--panel3);color:var(--mut);border:1px solid var(--line)}
+.nav .item.on{background:var(--acc-soft);color:var(--acc-txt);border-color:transparent;
+  box-shadow:inset 0 0 0 1px rgba(255,85,0,.21)}
+.nav .item.on .tag{background:rgba(255,85,0,.10);color:var(--acc-txt);border-color:rgba(255,85,0,.22)}
+.side-foot{border-top:1px solid var(--line);padding-top:12px;margin-top:8px;display:flex;flex-direction:column;gap:10px}
+.seg{display:flex;background:#0A0B0D;border:1px solid var(--line);border-radius:99px;padding:3px;gap:2px}
+.seg span{flex:1;text-align:center;font-size:11px;padding:5px 4px;border-radius:99px;color:var(--mut2)}
+.langs{display:flex;flex-wrap:wrap;gap:4px}
+.langs span{font-size:10px;padding:4px 9px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);color:var(--mut2)}
+.langs span.on{background:var(--acc-soft);border-color:rgba(255,85,0,.21);color:var(--acc-txt)}
+.seg span.on{background:var(--panel3);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.me{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:var(--r3);background:var(--panel)}
+.avatar{width:30px;height:30px;border-radius:9px;flex:0 0 30px;background:linear-gradient(140deg,#2A2D33,#191B1F);border:1px solid var(--line2);display:grid;place-items:center;font-size:12px;font-weight:700;color:#D7DBE0}
+.me small{display:block;color:var(--mut2);font-size:10.5px}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:14px;padding:0 22px;border-bottom:1px solid var(--line);background:rgba(10,11,14,.88);backdrop-filter:blur(12px)}
+.topbar h1{font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+.topbar h1 small{display:block;font-weight:400;color:var(--mut2);font-size:11.5px;letter-spacing:0}
+.tb-right{margin-inline-start:auto;display:flex;align-items:center;gap:10px}
+.search{display:flex;align-items:center;gap:8px;background:#0C0D0F;border:1px solid var(--line);border-radius:99px;padding:7px 13px;color:var(--mut2);font-size:12.5px;min-width:230px}
+.icon-btn{width:34px;height:34px;border-radius:10px;background:#0C0D0F;border:1px solid var(--line);display:grid;place-items:center;position:relative;font-size:14px}
+.dot{position:absolute;top:5px;inset-inline-end:5px;min-width:15px;height:15px;border-radius:99px;background:var(--acc);color:#fff;font-size:9.5px;font-weight:800;display:grid;place-items:center;padding:0 3px}
+.content{flex:1;padding:18px 22px;overflow:hidden}
+
+/* ---------- atoms ---------- */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.row{display:flex;align-items:center;gap:10px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r);padding:13px 16px;box-shadow:0 12px 28px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.045);position:relative}
+.card.flat{box-shadow:none;background:var(--panel)}
+.card.acc{border-color:rgba(255,85,0,.22);background:linear-gradient(135deg,rgba(255,85,0,.08) 0%,rgba(18,20,26,.60) 100%)}
+.ch{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.ch h3{font-size:13px;font-weight:700;letter-spacing:.01em}
+.ch .ic{width:26px;height:26px;border-radius:8px;background:var(--panel3);border:1px solid var(--line);display:grid;place-items:center;font-size:13px}
+.ch .more{margin-inline-start:auto;color:var(--mut2);font-size:11.5px}
+.kpi .lbl{color:var(--mut);font-size:11.5px;display:flex;align-items:center;gap:6px}
+.kpi .val{font-size:26px;font-weight:700;margin-top:6px;letter-spacing:-.03em}
+.kpi .sub{font-size:11px;color:var(--mut2);margin-top:4px}
+.up{color:var(--ok)} .down{color:var(--bad)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;padding:3px 9px;border-radius:99px;background:var(--panel3);border:1px solid var(--line);color:var(--mut)}
+.pill.ok{background:rgba(47,208,122,.12);border-color:rgba(47,208,122,.3);color:#6FE3A8}
+.pill.warn{background:rgba(255,176,32,.12);border-color:rgba(255,176,32,.3);color:#FFCC6B}
+.pill.bad{background:rgba(255,77,77,.12);border-color:rgba(255,77,77,.32);color:#FF8A8A}
+.pill.info{background:rgba(76,141,255,.12);border-color:rgba(76,141,255,.3);color:#8FB6FF}
+.pill.acc{background:var(--acc-soft);border-color:rgba(255,85,0,.21);color:var(--acc-txt)}
+.pill.purple{background:rgba(168,123,255,.12);border-color:rgba(168,123,255,.3);color:#C4A5FF}
+.live{width:7px;height:7px;border-radius:99px;background:var(--ok);box-shadow:0 0 0 0 rgba(47,208,122,.6);animation:pulse 2s infinite}
+.live.acc{background:var(--acc);box-shadow:0 0 0 0 rgba(255,85,0,.5)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,208,122,.45)}70%{box-shadow:0 0 0 8px rgba(47,208,122,0)}100%{box-shadow:0 0 0 0 rgba(47,208,122,0)}}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 15px;border-radius:var(--r2);font-size:12.5px;font-weight:600;border:1px solid var(--line2);background:var(--panel3);color:var(--fg);cursor:pointer}
+.btn.prim{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent;color:#fff;border-radius:var(--r2);font-weight:700;box-shadow:0 4px 15px rgba(255,85,0,.30)}
+.btn.ghost{background:transparent;border-color:var(--line)}
+.btn.sm{padding:6px 11px;font-size:11.5px;border-radius:9px}
+.prog{height:6px;border-radius:99px;background:#0B0C0E;border:1px solid var(--line);overflow:hidden}
+.prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.prog i.ok{background:linear-gradient(90deg,#1FA45F,#2FD07A)}
+.prog i.bad{background:linear-gradient(90deg,#C43737,#FF4D4D)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:start;color:var(--mut2);font-weight:600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:0 10px 9px}
+td{padding:8px 10px;border-top:1px solid var(--line);color:#DDE1E6}
+tr:hover td{background:rgba(255,255,255,.02)}
+.tgl{width:38px;height:21px;border-radius:99px;background:#25272C;border:1px solid var(--line2);position:relative;flex:0 0 38px}
+.tgl.on{background:var(--acc);border-color:transparent;box-shadow:0 4px 12px -4px rgba(255,85,0,.6)}
+.tgl i{position:absolute;top:2px;inset-inline-start:2px;width:15px;height:15px;border-radius:99px;background:#EAEDF1;transition:.15s}
+.tgl.on i{inset-inline-start:20px;background:#fff}
+.tglrow{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.tglrow:first-child{border-top:0}
+.tglrow .t{font-size:12px;font-weight:600}
+.tglrow .s{font-size:10.5px;color:var(--mut2)}
+.tglrow .tgl{margin-inline-start:auto}
+.inp{background:#0B0C0E;border:1px solid var(--line);border-radius:var(--r2);padding:9px 12px;color:var(--fg);font-size:12.5px;width:100%;font-family:inherit}
+.inp.ph{color:var(--mut2)}
+.inp.big{font-size:19px;letter-spacing:.42em;text-align:center;font-family:var(--mono);padding:12px}
+.lbl2{font-size:11px;color:var(--mut);margin-bottom:6px;display:block}
+.hr{height:1px;background:var(--line);margin:12px 0}
+.mini{font-size:11px;color:var(--mut2)}
+.code{font-family:var(--mono);font-size:11px;color:#CBD2D9;background:#0B0C0E;border:1px solid var(--line);border-radius:8px;padding:2px 7px;direction:ltr;display:inline-block}
+.bar{height:8px;border-radius:99px;background:#0B0C0E;border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.chip{font-size:10.5px;padding:4px 10px;border-radius:99px;background:var(--panel3);border:1px solid var(--line);color:var(--mut)}
+.chip.on{background:var(--acc-soft);border-color:rgba(255,85,0,.21);color:var(--acc-txt)}
+.notice{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:var(--r2);background:rgba(255,176,32,.08);border:1px solid rgba(255,176,32,.25);font-size:11.5px;color:#F3D9A8}
+.notice.bad{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.25);color:#F5B7B7}
+.notice.ok{background:rgba(47,208,122,.08);border-color:rgba(47,208,122,.22);color:#B6E9CE}
+.notice.info{background:rgba(76,141,255,.08);border-color:rgba(76,141,255,.22);color:#C2D6FF}
+.gauge{width:112px;height:112px;flex:0 0 112px;border-radius:99px;background:conic-gradient(var(--acc) 0 78%, #1B1D21 78% 100%);display:grid;place-items:center;position:relative}
+.gauge:after{content:"";position:absolute;inset:9px;border-radius:99px;background:linear-gradient(180deg,#141518,#0E0F11)}
+.gauge b{position:relative;font-size:22px;font-weight:700}
+.fab{position:fixed;inset-inline-start:20px;bottom:18px;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-size:20px;box-shadow:0 14px 34px rgba(255,85,0,.4), inset 0 1px 0 rgba(255,255,255,.35);z-index:50}
+.fab u{position:absolute;inset-inline-start:60px;bottom:14px;white-space:nowrap;background:#14161A;border:1px solid var(--line2);border-radius:99px;padding:6px 12px;font-size:11px;text-decoration:none;color:var(--fg);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.sheen{background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 32%);}
+
+/* ================= RESPONSIVE (phone / tablet / touch) ================= */
+html,body{overflow:hidden}
+.app{height:100vh;padding-bottom:58px}          /* room for the mobile tab bar */
+.sidebar{transition:transform .25s ease}
+
+@media (hover:none) and (pointer:coarse){
+  .nav .item{padding:11px 12px}                  /* bigger touch targets */
+  .icon-btn{width:38px;height:38px}
+}
+@media (max-width:1024px){
+  .content{padding:16px}
+  .g4,.grid[style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+  .g3,.grid[style*="repeat(3,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+}
+@media (max-width:860px){
+  /* sidebar becomes an off-canvas drawer */
+  .sidebar{position:fixed;top:0;bottom:0;inset-inline-start:0;z-index:70;
+    transform:translateX(105%);width:270px;flex-basis:270px;box-shadow:-20px 0 60px rgba(0,0,0,.7)}
+  html[dir="rtl"] .sidebar{transform:translateX(105%)}
+  html[dir="ltr"] .sidebar{transform:translateX(-105%)}
+  .sidebar.open{transform:none!important}
+  .main{width:100%}
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:65;display:none}
+  .backdrop.on{display:block}
+
+  /* top bar compacts; search collapses */
+  .topbar{height:58px;flex-basis:58px;padding:0 14px;gap:9px}
+  .topbar h1{font-size:14.5px}
+  .topbar h1 small{display:none}
+  .search{display:none}
+  .tb-right .pill:not(.acc){display:none}
+  #navToggle{display:grid!important}
+  .content{padding:12px 12px 8px}
+
+  /* every multi-column grid collapses to one column */
+  .g2,.g3,.g4,
+  .grid[style*="repeat(4,1fr)"],
+  .grid[style*="repeat(3,1fr)"],
+  .grid[style*="repeat(2,1fr)"],
+  .grid[style*="1.4fr 1fr"],
+  .grid[style*="1.5fr 1fr"],
+  .grid[style*="1.3fr 1fr"],
+  .grid[style*="1.35fr"],
+  .grid[style*="1.1fr 1fr"],
+  .grid[style*="1fr 300px"],
+  .grid[style*="300px 1fr"],
+  .grid[style*="230px 1fr 250px"],
+  .grid[style*="1.25fr 1fr"],
+  .grid[style*="1fr 1fr"]{grid-template-columns:1fr!important}
+
+  /* stacked cards shouldn't stretch to full viewport height */
+  .grid,.card{height:auto!important;min-height:0}
+  .content{overflow-y:auto;overflow-x:hidden}
+  .page{height:auto!important;min-height:0}
+  .page.act{display:block}
+
+  .fab{inset-inline-start:auto;inset-inline-end:14px;bottom:74px;width:46px;height:46px;font-size:18px}
+  .fab u{display:none}
+  table{font-size:11px}
+  th,td{padding:7px 6px}
+  .kpi .val{font-size:21px}
+}
+
+/* mobile tab bar (shown only on phones) */
+.mtab{display:none}
+@media (max-width:860px){
+  .mtab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;inset-inline:0;
+    height:58px;background:rgba(10,11,14,.96);backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);z-index:60}
+  .mtab a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    font-size:9.5px;color:var(--mut2);text-decoration:none;cursor:pointer}
+  .mtab a i{font-size:17px;font-style:normal}
+  .mtab a.on{color:var(--acc-txt)}
+}
+#navToggle{width:34px;height:34px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);
+  place-items:center;font-size:15px;cursor:pointer;flex:0 0 34px;display:none}
+
+</style></head>
+<body><div class="app">
+<aside class="sidebar">
+  <div class="brand" style="flex-direction:column;align-items:flex-start;gap:8px;padding-bottom:14px">
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4NTAgMzIwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjgwMCI+CiAgCiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0ic29mdC1zaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI2IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjMDAwMDAwIiBmbG9vZC1vcGFjaXR5PSIwLjQ1IiAvPgogICAgICA8L2ZpbHRlcj4KICAgICAgPGZpbHRlciBpZD0ib3JhbmdlLWdsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIwIiBzdGREZXZpYXRpb249IjYiIGZsb29kLWNvbG9yPSIjRkY1NTAwIiBmbG9vZC1vcGFjaXR5PSIwLjYiIC8+CiAgICAgIDwvZmlsdGVyPgogICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJsYWRlLWdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwLjg4Ii8+CiAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CiAgCiAgCiAgCiAgPGcgaWQ9ImVtYmxlbS1ncm91cCI+CiAgICA8IS0tIEFwZXJ0dXJlIEJsYWRlcyAtLT4KICAgIAogICAgPHBhdGggCiAgICAgIGQ9Ik0gMjc0Ljg5IDE2NS4wMiBBIDExNSAxMTUgMCAwIDEgMjIxLjc5IDI1Ni45OSBRIDIyMy45NiAyMjAuNzAgMjAyLjA0IDE4My43OCBBIDQ4LjMgNDguMyAwIDAgMCAyMDIuMDQgMTM2LjIyIFEgMjQ1Ljc1IDEzOS40MSAyNzQuODkgMTY1LjAyIFoiIAogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIiAKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CiAgCgogICAgPHBhdGggCiAgICAgIGQ9Ik0gMjEzLjEwIDI2Mi4wMSBBIDExNSAxMTUgMCAwIDEgMTA2LjkwIDI2Mi4wMSBRIDEzOS40MSAyNDUuNzUgMTYwLjQyIDIwOC4zMCBBIDQ4LjMgNDguMyAwIDAgMCAyMDEuNjIgMTg0LjUxIFEgMjIwLjcwIDIyMy45NiAyMTMuMTAgMjYyLjAxIFoiIAogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIiAKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CiAgCgogICAgPHBhdGggCiAgICAgIGQ9Ik0gOTguMjEgMjU2Ljk5IEEgMTE1IDExNSAwIDAgMSA0NS4xMSAxNjUuMDIgUSA3NS40NSAxODUuMDUgMTE4LjM4IDE4NC41MSBBIDQ4LjMgNDguMyAwIDAgMCAxNTkuNTggMjA4LjMwIFEgMTM0Ljk1IDI0NC41NSA5OC4yMSAyNTYuOTkgWiIgCiAgICAgIGZpbGw9InVybCgjYmxhZGUtZ3JhZCkiIAogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KICAKCiAgICA8cGF0aCAKICAgICAgZD0iTSA0NS4xMSAxNTQuOTggQSAxMTUgMTE1IDAgMCAxIDk4LjIxIDYzLjAxIFEgOTYuMDQgOTkuMzAgMTE3Ljk2IDEzNi4yMiBBIDQ4LjMgNDguMyAwIDAgMCAxMTcuOTYgMTgzLjc4IFEgNzQuMjUgMTgwLjU5IDQ1LjExIDE1NC45OCBaIiAKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIgCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgogIAoKICAgIDxwYXRoIAogICAgICBkPSJNIDEwNi45MCA1Ny45OSBBIDExNSAxMTUgMCAwIDEgMjEzLjEwIDU3Ljk5IFEgMTgwLjU5IDc0LjI1IDE1OS41OCAxMTEuNzAgQSA0OC4zIDQ4LjMgMCAwIDAgMTE4LjM4IDEzNS40OSBRIDk5LjMwIDk2LjA0IDEwNi45MCA1Ny45OSBaIiAKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIgCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgogIAoKICAgIDxwYXRoIAogICAgICBkPSJNIDIyMS43OSA2My4wMSBBIDExNSAxMTUgMCAwIDEgMjc0Ljg5IDE1NC45OCBRIDI0NC41NSAxMzQuOTUgMjAxLjYyIDEzNS40OSBBIDQ4LjMgNDguMyAwIDAgMCAxNjAuNDIgMTExLjcwIFEgMTg1LjA1IDc1LjQ1IDIyMS43OSA2My4wMSBaIiAKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIgCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgogIAogICAgPCEtLSBQcmVjaXNpb24gVGFyZ2V0IFJldGljbGUgLS0+CiAgICAKICAgIDxnIGlkPSJyZXRpY2xlLWdyb3VwIiBmaWx0ZXI9InVybCgjb3JhbmdlLWdsb3cpIiB0cmFuc2Zvcm09InJvdGF0ZSgwIDE2MCAxNjApIj4KICAgICAgPCEtLSBPdXRlciBSZXRpY2xlIFJpbmcgLS0+CiAgICAgIDxjaXJjbGUgCiAgICAgICAgY3g9IjE2MCIgCiAgICAgICAgY3k9IjE2MCIgCiAgICAgICAgcj0iMzYuNzEiIAogICAgICAgIGZpbGw9Im5vbmUiIAogICAgICAgIHN0cm9rZT0iI0ZGNTUwMCIgCiAgICAgICAgc3Ryb2tlLXdpZHRoPSIzLjgwIgogICAgICAvPgogICAgICAKICAgICAgICA8IS0tIFRvcCBUaWNrIC0tPgogICAgICAgIDxyZWN0IAogICAgICAgICAgeD0iMTU3LjkwIiAKICAgICAgICAgIHk9IjExNS4yOSIgCiAgICAgICAgICB3aWR0aD0iNC4yMCIgCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIiAKICAgICAgICAgIHJ4PSIxIiAKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiIAogICAgICAgIC8+CiAgICAgICAgPCEtLSBCb3R0b20gVGljayAtLT4KICAgICAgICA8cmVjdCAKICAgICAgICAgIHg9IjE1Ny45MCIgCiAgICAgICAgICB5PSIxODguNzEiIAogICAgICAgICAgd2lkdGg9IjQuMjAiIAogICAgICAgICAgaGVpZ2h0PSIxNi4wMCIgCiAgICAgICAgICByeD0iMSIgCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIiAKICAgICAgICAvPgogICAgICAgIDwhLS0gTGVmdCBUaWNrIC0tPgogICAgICAgIDxyZWN0IAogICAgICAgICAgeD0iMTE1LjI5IiAKICAgICAgICAgIHk9IjE1Ny45MCIgCiAgICAgICAgICB3aWR0aD0iMTYuMDAiIAogICAgICAgICAgaGVpZ2h0PSI0LjIwIiAKICAgICAgICAgIHJ4PSIxIiAKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiIAogICAgICAgIC8+CiAgICAgICAgPCEtLSBSaWdodCBUaWNrIC0tPgogICAgICAgIDxyZWN0IAogICAgICAgICAgeD0iMTg4LjcxIiAKICAgICAgICAgIHk9IjE1Ny45MCIgCiAgICAgICAgICB3aWR0aD0iMTYuMDAiIAogICAgICAgICAgaGVpZ2h0PSI0LjIwIiAKICAgICAgICAgIHJ4PSIxIiAKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiIAogICAgICAgIC8+CiAgICAgIAogICAgICAKICAgICAgICA8IS0tIENlbnRlciBCdWxsc2V5ZSBEb3QgLS0+CiAgICAgICAgPGNpcmNsZSAKICAgICAgICAgIGN4PSIxNjAiIAogICAgICAgICAgY3k9IjE2MCIgCiAgICAgICAgICByPSIxMy45NSIgCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIiAKICAgICAgICAvPgogICAgICAKICAgIDwvZz4KICAKICA8L2c+CiAgCiAgCiAgICAgICAgPGcgaWQ9InR5cG9ncmFwaHktaG9yaXpvbnRhbCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzMwLCAxOTUpIj4KICAgICAgICAgIDx0ZXh0IAogICAgICAgICAgICBmb250LWZhbWlseT0iJ091dGZpdCcsICdNb250c2VycmF0JywgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiIgCiAgICAgICAgICAgIGZvbnQtc2l6ZT0iOTYiIAogICAgICAgICAgICBmb250LXdlaWdodD0iODAwIiAKICAgICAgICAgICAgbGV0dGVyLXNwYWNpbmc9Ii0wLjAyZW0iCiAgICAgICAgICA+CiAgICAgICAgICAgIDx0c3BhbiBmaWxsPSIjRkY1NTAwIj5vbmU8L3RzcGFuPjx0c3BhbiBmaWxsPSIjRkZGRkZGIj5TaG90PC90c3Bhbj4KICAgICAgICAgIDwvdGV4dD4KICAgICAgICA8L2c+CiAgICAgIAo8L3N2Zz4=" alt="oneShot" style="height:34px;width:90px;display:block;">
+    <div style="display:flex;align-items:center;gap:7px">
+      <span style="font-size:10.5px;font-weight:800;letter-spacing:.20em;color:var(--acc-txt);font-family:var(--font-disp)">UNIVERSE</span>
+      <span style="font-size:8.5px;letter-spacing:.13em;color:var(--mut2)">ONE PLATFORM · YOUR BUSINESS</span>
+    </div>
+  </div>
+  <div class="nav"><div class="item"><i>🛰️</i><span>مركز القيادة</span></div><div class="item"><i>💳</i><span>المدفوعات</span><span class="tag">HUB</span></div><div class="item"><i>💰</i><span>محفظتي</span></div><div class="item"><i>🎬</i><span>الخدمات والميديا</span></div><div class="item"><i>📣</i><span>التسويق الرقمي</span></div><div class="item"><i>🔗</i><span>ربط الـ API</span></div><div class="item"><i>🗂️</i><span>الكتالوج</span><span class="tag">12</span></div><div class="item"><i>🔗</i><span>إعداد البوابات</span></div><div class="item"><i>👥</i><span>العملاء</span></div><div class="item"><i>👔</i><span>الفريق</span></div><div class="item"><i>🤖</i><span>OneShot AI</span><span class="tag">AI</span></div><div class="item"><i>📊</i><span>التحليلات</span></div><div class="item"><i>🔔</i><span>التنبيهات</span><span class="tag">4</span></div><div class="item"><i>⚙️</i><span>الإدارة</span></div></div>
+  <div class="side-foot">
+    <div class="seg"><span class="on">أدمين</span><span class="">تاجر</span><span class="">لودر</span></div>
+    <div class="langs"><span class="on">العربية</span><span>EN</span><span>中文</span><span>RU</span><span>FR</span></div>
+    <div class="me">
+      <div class="avatar">ح</div>
+      <div style="flex:1"><b style="font-size:12px">حسين العتيبي</b><small>حساب أدمين · مستخدم موثّق</small></div>
+      <span style="color:var(--mut2)">⋮</span>
+    </div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div id="navToggle">☰</div>
+    <div><h1>التكاملات والـ APIs<small>المفاتيح تُضاف من حسابك — لا تُخزَّن في الواجهة</small></h1>
+    <span class="pill acc" style="font-family:var(--font-disp);letter-spacing:.10em">oneShot · PAYMENT HUB</span></div>
+    <div class="tb-right">
+      <div class="pill acc">👑 وضع الأدمين</div>
+      <div class="pill"><span class="live"></span> متصل</div>
+      <div class="search">🔍 ابحث في كل الأنظمة… <span style="margin-inline-start:auto">⌘K</span></div>
+      <div class="icon-btn">＋</div>
+      <div class="icon-btn">🔔<span class="dot">4</span></div>
+    </div>
+  </header>
+  <div class="content"><div class="grid" style="grid-template-columns:repeat(4,1fr);gap:12px;align-content:start"><div class="card " style=""><div class="ch"><div class="ic">🖼️</div><h3>توليد الصور بالذكاء الاصطناعي</h3><span class="more">بانتظار المفتاح</span></div><div class="mini" style="margin-bottom:8px">AI Image — يحوّل الوصف إلى صور/إعلانات</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> API Key + Account ID (من حسابك لدى المزوّد)</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">🎬</div><h3>تحرير الفيديو</h3><span class="more">بانتظار المفتاح</span></div><div class="mini" style="margin-bottom:8px">Video Editing — مونتاج آلي / قصّ / ترجمة</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> API Key + Project/Workspace ID</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">🧠</div><h3>الوكلاء الذكيون</h3><span class="more">جاهز</span></div><div class="mini" style="margin-bottom:8px">Agents — تنفيذ مهام داخل المنصة</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> مفتاح النموذج + حدّ الإنفاق</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">💳</div><h3>بوابات الدفع</h3><span class="more">جاهز</span></div><div class="mini" style="margin-bottom:8px">PayTabs · Telr · مدى · Apple Pay</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> لكل بوابة معطياتها (انظر شاشة إعداد البوابات)</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">🗄️</div><h3>التخزين والملفات</h3><span class="more">بانتظار المفتاح</span></div><div class="mini" style="margin-bottom:8px">رفع أصول الميديا والتسليمات</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> مفتاح التخزين + الـ Bucket</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">📊</div><h3>التحليلات والتتبّع</h3><span class="more">غير مفعّل</span></div><div class="mini" style="margin-bottom:8px">قياس الزيارات وROAS (اختياري)</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> GTM / GA4 ID</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">💬</div><h3>واتساب للأعمال</h3><span class="more">بانتظار المفتاح</span></div><div class="mini" style="margin-bottom:8px">تنبيهات ورسائل العملاء</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> رقم + Token من WhatsApp Business</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div><div class="card " style=""><div class="ch"><div class="ic">✉️</div><h3>البريد المعاملاتي</h3><span class="more">جاهز</span></div><div class="mini" style="margin-bottom:8px">فواتير وإشعارات</div>
+    <div class="mini" style="line-height:1.7;color:#DDE1E6"><b style="color:var(--mut)">المطلوب:</b> SMTP / API Key</div>
+    <div class="row" style="gap:7px;margin-top:10px;flex-wrap:wrap">
+      <span class="btn sm prim">إضافة المفتاح</span><span class="btn sm ghost">التوثيق</span></div></div></div>
+<div class="notice warn" style="margin-top:12px">🔑 كل مفتاح تُدخله أنت من إعدادات حسابك لدى المزوّد، ويُخزَّن مشفّرًا في الخادم ولا يظهر في الواجهة بعد الحفظ. لا أستطيع توليد مفاتيح.</div></div>
+</div></div>
+<div class="backdrop" id="backdrop"></div>
+<nav class="mtab">
+  <a data-go="cmd"><i>🛰️</i>الرئيسية</a>
+  <a data-go="pay"><i>💳</i>المدفوعات</a>
+  <a data-go="wallet"><i>💰</i>محفظتي</a>
+  <a data-go="cust"><i>👥</i>العملاء</a>
+  <a data-go="ai"><i>🤖</i>AI</a>
+</nav>
+<div class="fab">◱<u>الشاشة العائمة — Live Ops</u></div>
+<script>
+(function(){
+  var sb=document.querySelector('.sidebar'), tg=document.getElementById('navToggle'),
+      bd=document.getElementById('backdrop');
+  function close(){ if(sb) sb.classList.remove('open'); if(bd) bd.classList.remove('on'); }
+  if(tg) tg.addEventListener('click',function(){ sb.classList.toggle('open'); bd.classList.toggle('on'); });
+  if(bd) bd.addEventListener('click',close);
+  function go(k){
+    close();
+    if(window.__go) { window.__go(k); return; }
+    var t=document.querySelector('.nav .item[data-go='+k+']'); if(t) t.click();
+  }
+  window.__go = go;
+  document.querySelectorAll('.mtab a').forEach(function(a){
+    a.addEventListener('click',function(){ go(a.dataset.go); });
+  });
+  var nav=document.querySelector('.nav');
+  if(nav) new MutationObserver(function(){
+    var on=document.querySelector('.nav .item.on');
+    document.querySelectorAll('.mtab a').forEach(function(a){
+      a.classList.toggle('on', !!on && on.dataset.go===a.dataset.go);
+    });
+  }).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
+})();
+</script>
+</body></html>

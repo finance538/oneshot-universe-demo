@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OneShot — إدارة الحسابات</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--bg:#0A0B0E;--bg2:#0E1015;--panel:#12141A;--panel2:#171A21;--panel3:#1D212A;
+ --line:rgba(255,255,255,.08);--fg:#F5F5F2;--mut:#9DA3AB;--mut2:#6B7178;
+ --acc:#FF5500;--acc2:#E04400;--acc-txt:#FF8243;--soft:rgba(255,85,0,.08);
+ --ok:#2FD07A;--warn:#FFB020;--bad:#FF4D4D;--font-ar:"Cairo","Noto Sans Arabic",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-ar);background-color:var(--bg);
+ background-image:radial-gradient(at 20% 20%, rgba(92,53,38,.50) 0px, rgba(25,28,37,0) 55%);
+ color:var(--fg);-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;padding:22px}
+.wrap{max-width:1080px;margin:0 auto}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+header img{height:26px}
+header h1{font-size:16px;font-weight:800}
+header .sp{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+.pill{font-size:11px;padding:5px 12px;border-radius:99px;background:var(--panel2);
+ border:1px solid var(--line);color:var(--mut)}
+.pill.acc{background:var(--soft);border-color:rgba(255,85,0,.21);color:var(--acc-txt)}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
+.card{background:linear-gradient(140deg,var(--panel2),var(--panel));border:1px solid var(--line);
+ border-radius:18px;padding:18px}
+.card h3{font-size:13px;font-weight:800;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:start;font-size:10.5px;color:var(--mut2);letter-spacing:.06em;text-transform:uppercase;padding:0 10px 9px}
+td{padding:9px 10px;border-top:1px solid var(--line);color:#DDE1E6}
+label{display:block;font-size:11.5px;color:var(--mut);margin-bottom:6px}
+input,select{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+ padding:10px 12px;color:var(--fg);font-size:13px;font-family:inherit;margin-bottom:12px}
+input{ }input[name=email],input[name=password]{direction:ltr}
+select{cursor:pointer}
+.btn{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);
+ color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer}
+.btn.prim{background:linear-gradient(135deg,var(--acc),var(--acc2));border-color:transparent}
+.btn[disabled]{opacity:.6}
+.msg{display:none;font-size:11.5px;border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.msg.on{display:block}
+.msg.err{color:#FF8A8A;background:rgba(255,77,77,.08);border:1px solid rgba(255,77,77,.25)}
+.msg.ok{color:#B6E9CE;background:rgba(47,208,122,.08);border:1px solid rgba(47,208,122,.22)}
+.note{font-size:10.5px;color:var(--mut2);line-height:1.7;background:var(--bg2);
+ border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
+.role{font-size:10.5px;padding:3px 9px;border-radius:99px}
+.role.admin{background:var(--soft);border:1px solid rgba(255,85,0,.21);color:var(--acc-txt)}
+.role.merchant{background:rgba(76,141,255,.10);border:1px solid rgba(76,141,255,.25);color:#8FB6FF}
+.role.loader{background:rgba(255,176,32,.10);border:1px solid rgba(255,176,32,.25);color:#FFCC6B}
+.gate{padding:26px;text-align:center}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+<div class="wrap">
+  <header>
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjY1IDI1IDM3MCAzNzAiIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIj4KCiAgICA8ZGVmcz4KICAgICAgPGZpbHRlciBpZD0ic29mdC1zaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSI2IiBzdGREZXZpYXRpb249IjgiIGZsb29kLWNvbG9yPSIjMDAwMDAwIiBmbG9vZC1vcGFjaXR5PSIwLjQ1IiAvPgogICAgICA8L2ZpbHRlcj4KICAgICAgPGZpbHRlciBpZD0ib3JhbmdlLWdsb3ciIHg9Ii0zMCUiIHk9Ii0zMCUiIHdpZHRoPSIxNjAlIiBoZWlnaHQ9IjE2MCUiPgogICAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIwIiBzdGREZXZpYXRpb249IjYiIGZsb29kLWNvbG9yPSIjRkY1NTAwIiBmbG9vZC1vcGFjaXR5PSIwLjYiIC8+CiAgICAgIDwvZmlsdGVyPgogICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJsYWRlLWdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwLjg4Ii8+CiAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8L2RlZnM+CgoKCiAgPHJlY3QgeD0iNjUiIHk9IjI1IiB3aWR0aD0iMzcwIiBoZWlnaHQ9IjM3MCIgcng9IjcyIiBmaWxsPSIjMTIxNDFBIiAvPgogIDxnIGlkPSJlbWJsZW0tZ3JvdXAiPgogICAgPCEtLSBBcGVydHVyZSBCbGFkZXMgLS0+CgogICAgPHBhdGgKICAgICAgZD0iTSAzODkuODcgMjE2LjExIEEgMTQwIDE0MCAwIDAgMSAzMjUuMjIgMzI4LjA3IFEgMzI3Ljg3IDI4My45MCAzMDEuMTggMjM4Ljk1IEEgNTguOCA1OC44IDAgMCAwIDMwMS4xOCAxODEuMDUgUSAzNTQuMzkgMTg0Ljk0IDM4OS44NyAyMTYuMTEgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzE0LjY0IDMzNC4xOCBBIDE0MCAxNDAgMCAwIDEgMTg1LjM2IDMzNC4xOCBRIDIyNC45NCAzMTQuMzkgMjUwLjUxIDI2OC44MCBBIDU4LjggNTguOCAwIDAgMCAzMDAuNjYgMjM5Ljg0IFEgMzIzLjkwIDI4Ny44NyAzMTQuNjQgMzM0LjE4IFoiCiAgICAgIGZpbGw9InVybCgjYmxhZGUtZ3JhZCkiCiAgICAgIGZpbHRlcj0idXJsKCNzb2Z0LXNoYWRvdykiCiAgICAvPgoKCiAgICA8cGF0aAogICAgICBkPSJNIDE3NC43OCAzMjguMDcgQSAxNDAgMTQwIDAgMCAxIDExMC4xMyAyMTYuMTEgUSAxNDcuMDcgMjQwLjQ5IDE5OS4zNCAyMzkuODQgQSA1OC44IDU4LjggMCAwIDAgMjQ5LjQ5IDI2OC44MCBRIDIxOS41MSAzMTIuOTMgMTc0Ljc4IDMyOC4wNyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxMTAuMTMgMjAzLjg5IEEgMTQwIDE0MCAwIDAgMSAxNzQuNzggOTEuOTMgUSAxNzIuMTMgMTM2LjEwIDE5OC44MiAxODEuMDUgQSA1OC44IDU4LjggMCAwIDAgMTk4LjgyIDIzOC45NSBRIDE0NS42MSAyMzUuMDYgMTEwLjEzIDIwMy44OSBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCgogICAgPHBhdGgKICAgICAgZD0iTSAxODUuMzYgODUuODIgQSAxNDAgMTQwIDAgMCAxIDMxNC42NCA4NS44MiBRIDI3NS4wNiAxMDUuNjEgMjQ5LjQ5IDE1MS4yMCBBIDU4LjggNTguOCAwIDAgMCAxOTkuMzQgMTgwLjE2IFEgMTc2LjEwIDEzMi4xMyAxODUuMzYgODUuODIgWiIKICAgICAgZmlsbD0idXJsKCNibGFkZS1ncmFkKSIKICAgICAgZmlsdGVyPSJ1cmwoI3NvZnQtc2hhZG93KSIKICAgIC8+CgoKICAgIDxwYXRoCiAgICAgIGQ9Ik0gMzI1LjIyIDkxLjkzIEEgMTQwIDE0MCAwIDAgMSAzODkuODcgMjAzLjg5IFEgMzUyLjkzIDE3OS41MSAzMDAuNjYgMTgwLjE2IEEgNTguOCA1OC44IDAgMCAwIDI1MC41MSAxNTEuMjAgUSAyODAuNDkgMTA3LjA3IDMyNS4yMiA5MS45MyBaIgogICAgICBmaWxsPSJ1cmwoI2JsYWRlLWdyYWQpIgogICAgICBmaWx0ZXI9InVybCgjc29mdC1zaGFkb3cpIgogICAgLz4KCiAgICA8IS0tIFByZWNpc2lvbiBUYXJnZXQgUmV0aWNsZSAtLT4KCiAgICA8ZyBpZD0icmV0aWNsZS1ncm91cCIgZmlsdGVyPSJ1cmwoI29yYW5nZS1nbG93KSIgdHJhbnNmb3JtPSJyb3RhdGUoMCAyNTAgMjEwKSI+CiAgICAgIDwhLS0gT3V0ZXIgUmV0aWNsZSBSaW5nIC0tPgogICAgICA8Y2lyY2xlCiAgICAgICAgY3g9IjI1MCIKICAgICAgICBjeT0iMjEwIgogICAgICAgIHI9IjQ0LjY5IgogICAgICAgIGZpbGw9Im5vbmUiCiAgICAgICAgc3Ryb2tlPSIjRkY1NTAwIgogICAgICAgIHN0cm9rZS13aWR0aD0iMy44MCIKICAgICAgLz4KCiAgICAgICAgPCEtLSBUb3AgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMTU3LjMxIgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBCb3R0b20gVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjQ3LjkwIgogICAgICAgICAgeT0iMjQ2LjY5IgogICAgICAgICAgd2lkdGg9IjQuMjAiCiAgICAgICAgICBoZWlnaHQ9IjE2LjAwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CiAgICAgICAgPCEtLSBMZWZ0IFRpY2sgLS0+CiAgICAgICAgPHJlY3QKICAgICAgICAgIHg9IjE5Ny4zMSIKICAgICAgICAgIHk9IjIwNy45MCIKICAgICAgICAgIHdpZHRoPSIxNi4wMCIKICAgICAgICAgIGhlaWdodD0iNC4yMCIKICAgICAgICAgIHJ4PSIxIgogICAgICAgICAgZmlsbD0iI0ZGNTUwMCIKICAgICAgICAvPgogICAgICAgIDwhLS0gUmlnaHQgVGljayAtLT4KICAgICAgICA8cmVjdAogICAgICAgICAgeD0iMjg2LjY5IgogICAgICAgICAgeT0iMjA3LjkwIgogICAgICAgICAgd2lkdGg9IjE2LjAwIgogICAgICAgICAgaGVpZ2h0PSI0LjIwIgogICAgICAgICAgcng9IjEiCiAgICAgICAgICBmaWxsPSIjRkY1NTAwIgogICAgICAgIC8+CgoKICAgICAgICA8IS0tIENlbnRlciBCdWxsc2V5ZSBEb3QgLS0+CiAgICAgICAgPGNpcmNsZQogICAgICAgICAgY3g9IjI1MCIKICAgICAgICAgIGN5PSIyMTAiCiAgICAgICAgICByPSIxNi45OCIKICAgICAgICAgIGZpbGw9IiNGRjU1MDAiCiAgICAgICAgLz4KCiAgICA8L2c+CgogIDwvZz4KCgo8L3N2Zz4K" alt="oneShot">
+    <h1>إدارة الحسابات</h1>
+    <div class="sp">
+      <span class="pill acc" id="who">—</span>
+      <span class="pill" id="count">—</span>
+      <a class="pill" href="40_login.html">تسجيل الدخول</a>
+    </div>
+  </header>
+
+  <div class="card gate" id="gate" style="display:none">
+    <h3>صلاحية الأدمين مطلوبة</h3>
+    <p style="font-size:12.5px;color:var(--mut);margin-bottom:14px" id="gateMsg">سجّل الدخول بحساب أدمين أولًا.</p>
+    <a class="btn prim" href="40_login.html" style="display:inline-block;max-width:220px;text-decoration:none">اذهب لتسجيل الدخول</a>
+  </div>
+
+  <div class="grid" id="main" style="display:none">
+    <div class="card">
+      <h3>المستخدمون المسجّلون</h3>
+      <table>
+        <thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>أُنشئ</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="note">🔐 القائمة تأتي من الخادم بعد التحقق من أن جلستك أدمين — لا يمكن الوصول إليها من المتصفح.</div>
+    </div>
+    <div class="card">
+      <h3>إنشاء حساب جديد</h3>
+      <div class="msg" id="msg"></div>
+      <label>الاسم</label><input id="c-name" placeholder="الاسم الكامل">
+      <label>البريد الإلكتروني</label><input id="c-email" placeholder="name@1shotcam.com">
+      <label>كلمة المرور <span style="color:var(--mut2)">(٨ أحرف على الأقل)</span></label>
+      <input id="c-pass" type="password" placeholder="••••••••">
+      <label>الدور</label>
+      <select id="c-role">
+        <option value="merchant">تاجر — بواباته وفواتيره فقط</option>
+        <option value="loader">لودر — محاكاة الدفع فقط</option>
+        <option value="admin">أدمين — كل الصلاحيات</option>
+      </select>
+      <button class="btn prim" id="create-btn">إنشاء الحساب</button>
+      <div class="note">الأدمين هو الوحيد الذي ينشئ الحسابات — والحساب الجديد يسجّل دخوله من نفس الصفحة الواحدة.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+var TOKEN = null;
+function $$(id){ return document.getElementById(id); }
+function msg(t,k){ var e=$$('msg'); e.textContent=t; e.className='msg on '+k; }
+function roleBadge(r){ return '<span class="role '+r+'">'+(r==='admin'?'أدمين':r==='merchant'?'تاجر':'لودر')+'</span>'; }
+
+async function api(path, body, token){
+  var h={'Content-Type':'application/json'}; if(token) h['Authorization']='Bearer '+token;
+  var res=await fetch('/api'+path,{method:body?'POST':'GET',headers:h,body:body?JSON.stringify(body):undefined});
+  var j={}; try{ j=await res.json(); }catch(e){}
+  j.status=res.status; return j;
+}
+
+async function load(){
+  var r = await api('/admin/users', null, TOKEN);
+  if (!r.ok){ $$('tbody').innerHTML='<tr><td colspan="4" style="color:#FF8A8A">'+(r.error||'تعذّر التحميل')+'</td></tr>'; return; }
+  $$('tbody').innerHTML = r.users.map(function(u){
+    return '<tr><td>'+u.name+'</td><td style="direction:ltr">'+u.email+'</td><td>'+roleBadge(u.role)+'</td>'+
+           '<td class="'+(u.createdAt||'')+'">'+String(u.createdAt||'').slice(0,10)+'</td></tr>';
+  }).join('') || '<tr><td colspan="4" style="color:var(--mut2)">لا حسابات بعد</td></tr>';
+  $$('count').textContent = r.users.length + ' حساب';
+}
+
+async function create(){
+  var name=$$('c-name').value, email=$$('c-email').value, pw=$$('c-pass').value, role=$$('c-role').value;
+  if(!name||!email||!pw) return msg('الاسم والبريد وكلمة المرور مطلوبة','err');
+  var b=$$('create-btn'); b.disabled=true; b.textContent='جارٍ الإنشاء…';
+  var r = await api('/admin/users', {name:name,email:email,password:pw,role:role}, TOKEN);
+  b.disabled=false; b.textContent='إنشاء الحساب';
+  if(r.ok){ msg('تم إنشاء حساب '+r.user.name+' بدور '+r.user.role,'ok');
+    $$('c-name').value=$$('c-email').value=$$('c-pass').value=''; load(); }
+  else msg(r.error||'تعذّر الإنشاء','err');
+}
+
+(async function(){
+  try{ TOKEN = localStorage.getItem('oneshot.token'); }catch(e){}
+  if(!TOKEN){ $$('gate').style.display='block'; $$('main').style.display='none'; return; }
+  var me = await api('/me', null, TOKEN);
+  if(!me.ok || me.user.role!=='admin'){
+    $$('gate').style.display='block'; $$('main').style.display='none';
+    $$('gateMsg').textContent = me.ok ? 'هذا الحساب ليس أدمين (دوره: '+me.user.role+').' : 'جلسة غير صالحة.';
+    return;
+  }
+  $$('gate').style.display='none'; $$('main').style.display='block';
+  $$('who').textContent = me.user.name + ' · أدمين';
+  load();
+})();
+$$('create-btn').addEventListener('click', create);
+</script>
+
+</body></html>
